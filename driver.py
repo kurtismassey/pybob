@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf8 -*-
-from client import Client
-from endpoints import Documents
-from endpoints import Metadata
-from endpoints import Onboarding
-from endpoints import Payroll
-from endpoints import People
-from endpoints import Reports
-from endpoints import Tasks
-from endpoints import TimeOff
+from .client import Client
+from .endpoints import Documents
+from .endpoints import Metadata
+from .endpoints import Onboarding
+from .endpoints import Payroll
+from .endpoints import People
+from .endpoints import Reports
+from .endpoints import Tasks
+from .endpoints import TimeOff
 
 
 class Driver:
