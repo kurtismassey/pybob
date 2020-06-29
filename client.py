@@ -50,7 +50,7 @@ class Client:
         except requests.HTTPError as error:
             log.exception(error)
             log.debug(response)
-            raise
+            raise error
 
         return response
 
