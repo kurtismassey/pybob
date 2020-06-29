@@ -12,7 +12,7 @@ class TimeOff(BaseEndpoint):
             policy_type,
             start_date,
             end_date,
-            description,
+            description='',
             start_date_portion='all_day',
             end_date_portion='all_day',
             skip_manager_approval=False,

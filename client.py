@@ -49,8 +49,9 @@ class Client:
             response.raise_for_status()
         except requests.HTTPError as error:
             log.exception(error)
+            log.debug(response)
+            raise
 
-        log.debug(response)
         return response
 
     def get(self, endpoint, query=None):
