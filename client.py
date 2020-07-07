@@ -2,14 +2,13 @@
 # -*- coding: utf8 -*-
 import logging
 import requests
-
+from .exceptions import HibobException
 
 log = logging.getLogger('hibiob.client')
 log.setLevel(logging.INFO)
 
 
 class Client:
-
     request_timeout = 30
     url = "https://api.hibob.com/v1/"
 
@@ -50,6 +49,11 @@ class Client:
         except requests.HTTPError as error:
             log.exception(error)
             log.debug(response)
+            if isinstance(response, dict):
+                # response is parsed to json
+                raise HibobException(response.get('error'))
+
+            # fallback to requests exception
             raise error
 
         return response
