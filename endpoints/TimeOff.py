@@ -92,11 +92,16 @@ class TimeOff(BaseEndpoint):
 
         # TODO: response schema
         """
-        print(since.isoformat(timespec='milliseconds'))
+        date_string = since.isoformat(timespec='milliseconds')
+
+        if since.tzinfo is None or since.tzinfo.utcoffset(since) is None:
+            # datetime is naive so fetching using utc tz
+            date_string += 'Z'
+
         return self.client.get(
             'timeoff/requests/changes',
             query={
-                'since': since.isoformat(timespec='milliseconds') + 'Z'
+                'since': date_string
             }
         )
 
