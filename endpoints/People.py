@@ -45,6 +45,9 @@ class People(BaseEndpoint):
 
         Args:
             show_inactive (bool): should include inactive employees
+
+        References:
+            https://apidocs.hibob.com/reference#get_people
         """
         return self.client.get(
             "people",
@@ -61,6 +64,9 @@ class People(BaseEndpoint):
 
         Args:
             identifier (str): employee id or email
+
+        References:
+            https://apidocs.hibob.com/reference#get_people-identifier
         """
         return self.client.get(
             "people/{identifier}".format(
@@ -74,6 +80,9 @@ class People(BaseEndpoint):
 
         Args:
             employee_id (str): employee id
+
+        References:
+            https://apidocs.hibob.com/reference#post_employees-identifier-uninvite
         """
         return self.client.post(
             'employees/{employee_id}/uninvite'.format(
@@ -88,6 +97,9 @@ class People(BaseEndpoint):
         Args:
             employee_id (str): employee id
             wizard_id (int):
+
+        References:
+            https://apidocs.hibob.com/reference#post_employees-employeeid-invitations
         """
         return self.client.post(
             'employees/{employee_id}/invitations'.format(
@@ -106,6 +118,9 @@ class People(BaseEndpoint):
             employee_id (str): employee id
             start_date (date): the date this entry becomes effective
             reason (str): additional info for the start date update
+
+        References:
+            https://apidocs.hibob.com/reference#post_employees-employeeid-start-date
         """
 
         options = {
@@ -128,6 +143,9 @@ class People(BaseEndpoint):
 
         Args:
             sort_by (str): optional field name to sort by, defaults to firstName
+
+        References:
+            https://apidocs.hibob.com/reference#get_profiles
         """
         return self.client.get(
             "profiles",
@@ -142,6 +160,9 @@ class People(BaseEndpoint):
 
         Args:
             email (str): employee email
+
+        References:
+            https://apidocs.hibob.com/reference#get_avatars
         """
         return self.client.get(
             'avatars',
@@ -156,6 +177,9 @@ class People(BaseEndpoint):
 
         Args:
             employee_id (str): employee id
+
+        References:
+            https://apidocs.hibob.com/reference#get_avatars-employeeid
         """
         return self.client.get(
             'avatars/{employee_id}'.format(
@@ -170,6 +194,9 @@ class People(BaseEndpoint):
         Args:
             employee_id (str): employee id
             url (str): the image to upload.
+
+        References:
+            https://apidocs.hibob.com/reference#put_avatars-employeeid
         """
         return self.client.put(
             'avatars/{employee_id}'.format(
@@ -183,6 +210,9 @@ class People(BaseEndpoint):
     def my_avatar(self):
         """
         Read logged-in user avatar
+
+        References:
+            https://apidocs.hibob.com/reference#get_my-avatar
         """
         return self.client.get('my/avatar')
 
@@ -195,6 +225,9 @@ class People(BaseEndpoint):
         Args:
             employee_id (str): employee id
             email (str): new employee's email
+
+        References:
+            https://apidocs.hibob.com/reference#put_people-id-email
         """
         return self.client.put(
             'people/{employee_id}/email'.format(
@@ -212,6 +245,9 @@ class People(BaseEndpoint):
 
         Args:
             employee_id (str): employee id
+
+        References:
+            https://apidocs.hibob.com/reference#get_people-id-lifecycle
         """
         return self.client.get(
             'people/{employee_id}/lifecycle'.format(

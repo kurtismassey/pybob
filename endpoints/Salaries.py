@@ -12,6 +12,9 @@ class Salaries(BaseEndpoint):
 
         Args:
             employee_id (str): employee id
+
+        References:
+            https://apidocs.hibob.com/reference#get_people-id-salaries
         """
         return self.client.get(
             'people/{employee_id}/salaries'.format(
@@ -42,6 +45,9 @@ class Salaries(BaseEndpoint):
                 One of: Annual, Hourly, Daily, Weekly, Monthly
             pay_frequency (str): represents the frequency the salary is paid.
                 One of: Weekly, Monthly, Pro rata, Every two weeks, Twice a month, Four weekly
+
+        References:
+            https://apidocs.hibob.com/reference#post_people-id-salaries
         """
         return self.client.post(
             'people/{employee_id}/salaries'.format(
@@ -66,6 +72,9 @@ class Salaries(BaseEndpoint):
         Args:
             employee_id (str): employee id
             entry_id (int): the entry id to delete
+
+        References:
+            https://apidocs.hibob.com/reference#delete_people-id-salaries-entry-id
         """
         return self.client.delete(
             'people/{employee_id}/salaries/{entry_id}'.format(

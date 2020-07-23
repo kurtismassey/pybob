@@ -13,6 +13,9 @@ class VariablePayments(BaseEndpoint):
 
         Args:
             employee_id (str): employee id
+
+        References:
+            https://apidocs.hibob.com/reference#get_people-id-variable
         """
         return self.client.get(
             'people/{employee_id}/variable'.format(
@@ -42,6 +45,9 @@ class VariablePayments(BaseEndpoint):
             pay_type (str): The type of the variable pay
             payment_period (str): represents the period for this variable entry.
                 One of: Annual, Half-Yearly, Quarterly, Monthly
+
+        References:
+            https://apidocs.hibob.com/reference#post_people-id-variable
         """
         return self.client.post(
             'people/{employee_id}/variable'.format(
@@ -66,6 +72,9 @@ class VariablePayments(BaseEndpoint):
         Args:
             employee_id (str): employee id
             entry_id (int): the entry id to delete
+
+        References:
+            https://apidocs.hibob.com/reference#delete_people-id-variable-entry-id
         """
         return self.client.delete(
             'people/{employee_id}/variable/{entry_id}'.format(

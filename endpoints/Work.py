@@ -12,6 +12,9 @@ class Work(BaseEndpoint):
 
         Args:
             employee_id (str): employee id
+
+        References:
+            https://apidocs.hibob.com/reference#get_people-id-work
         """
         return self.client.get(
             'people/{employee_id}/work'.format(
@@ -43,6 +46,8 @@ class Work(BaseEndpoint):
             site_id (int): job location id
             reports_to (str): The manager's employee id
 
+        References:
+            https://apidocs.hibob.com/reference#post_people-id-work
         """
         return self.client.post(
             'people/{employee_id}/work'.format(
@@ -66,6 +71,9 @@ class Work(BaseEndpoint):
         Args:
             employee_id (str): employee id
             entry_id (int): the entry id to delete
+
+        References:
+            https://apidocs.hibob.com/reference#delete_people-id-work-entry-id
         """
         return self.client.delete(
             'people/{employee_id}/work/{entry_id}'.format(
@@ -99,6 +107,9 @@ class Work(BaseEndpoint):
             site (str): job location
             site_id (int): job location id
             reports_to (str): The manager's employee id
+
+        References:
+            https://apidocs.hibob.com/reference#put_people-id-work-entry-id
         """
         return self.client.put(
             'people/{employee_id}/work/{entry_id}'.format(

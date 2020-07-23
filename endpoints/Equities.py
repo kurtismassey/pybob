@@ -11,6 +11,9 @@ class Equities(BaseEndpoint):
 
         Args:
             employee_id (str): employee id
+
+        References:
+            https://apidocs.hibob.com/reference#get_people-id-equities
         """
         return self.client.get(
             'people/{employee_id}/equities'.format(
@@ -52,8 +55,10 @@ class Equities(BaseEndpoint):
             grant_type (str): Grant type.
                 One of: Initial Grant, Merit Grant
             option_expiration (date): Date the options expire
-        """
 
+        References:
+            https://apidocs.hibob.com/reference#post_people-id-equities
+        """
         payload = {
             'reason': reason,
             'effectiveDate': str(effective_date),
@@ -87,6 +92,9 @@ class Equities(BaseEndpoint):
         Args:
             employee_id (str): employee id
             entry_id (int): the entry id to delete
+
+        References:
+            https://apidocs.hibob.com/reference#delete_people-id-equities-entry-id
         """
         return self.client.delete(
             'people/{employee_id}/equities/{entry_id}'.format(

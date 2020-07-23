@@ -9,7 +9,8 @@ class Tasks(BaseEndpoint):
         """
         Read all open tasks
 
-        # TODO: response schema
+        References:
+            https://apidocs.hibob.com/reference#get_tasks
         """
         return self.client.get('tasks')
 
@@ -17,6 +18,7 @@ class Tasks(BaseEndpoint):
         """
         Read tasks of the logged-in user
 
-        # TODO: response schema
+        References:
+            https://apidocs.hibob.com/reference#get_my-tasks
         """
         return self.client.get('my/tasks')

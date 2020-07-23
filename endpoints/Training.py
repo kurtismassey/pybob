@@ -11,6 +11,9 @@ class Training(BaseEndpoint):
 
         Args:
             employee_id (str): employee id
+
+        References:
+            https://apidocs.hibob.com/reference#get_people-id-training
         """
         return self.client.get(
             'people/{employee_id}/training'.format(
@@ -49,6 +52,9 @@ class Training(BaseEndpoint):
             start_date (date): the date this entry becomes effective
             end_date (date): date of training completion
             document_id (float): Document id of the document attached to this training entry
+
+        References:
+            https://apidocs.hibob.com/reference#post_people-id-training
         """
         return self.client.post(
             'people/{employee_id}/training'.format(
@@ -78,6 +84,9 @@ class Training(BaseEndpoint):
         Args:
             employee_id (str): employee id
             entry_id (int): the entry id to delete
+
+        References:
+            https://apidocs.hibob.com/reference#delete_people-id-training-entry-id
         """
         return self.client.delete(
             'people/{employee_id}/training/{entry_id}'.format(

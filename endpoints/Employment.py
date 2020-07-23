@@ -13,6 +13,9 @@ class Employment(BaseEndpoint):
 
         Args:
             employee_id (str): employee id
+
+        References:
+            https://apidocs.hibob.com/reference#get_people-id-employment
         """
         return self.client.get(
             'people/{employee_id}/employment'.format(
@@ -39,6 +42,9 @@ class Employment(BaseEndpoint):
             contract (str):
             entry_type (str):
             salary_pay_type (str):
+
+        References:
+            https://apidocs.hibob.com/reference#post_people-id-employment
         """
         return self.client.post(
             'people/{employee_id}/employment'.format(
@@ -60,6 +66,9 @@ class Employment(BaseEndpoint):
         Args:
             employee_id (str): employee id
             entry_id (int): the entry id to delete
+
+        References:
+            https://apidocs.hibob.com/reference#delete_people-id-employment-entry-id
         """
         return self.client.delete(
             'people/{employee_id}/employment/{entry_id}'.format(
@@ -89,6 +98,9 @@ class Employment(BaseEndpoint):
             contract (str):
             entry_type (str):
             salary_pay_type (str):
+
+        References:
+            https://apidocs.hibob.com/reference#put_people-id-employment-entry-id
         """
         return self.client.put(
             'people/{employee_id}/employment/{entry_id}'.format(

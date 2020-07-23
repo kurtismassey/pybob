@@ -16,7 +16,9 @@ class Documents(BaseEndpoint):
             tags (List[str]): document's tags
             shared (bool): whether document should be uploaded to shared folder or confidential
 
-        # TODO: response schema
+        References:
+            https://apidocs.hibob.com/reference#post_docs-people-id-shared
+            https://apidocs.hibob.com/reference#post_docs-people-id-confidential
         """
         tags = tags or []
         return self.client.post(
@@ -40,7 +42,9 @@ class Documents(BaseEndpoint):
             doc_id (str): document id
             shared (bool): whether document should be deleted from shared folder or confidential
 
-        # TODO: response schema
+        References:
+            https://apidocs.hibob.com/reference#delete_docs-people-id-shared-docid
+            https://apidocs.hibob.com/reference#delete_docs-people-id-confidential-docid
         """
         return self.client.delete(
             "docs/people/{employee_id}/{folder}/{doc_id}".format(
@@ -58,7 +62,8 @@ class Documents(BaseEndpoint):
         Args:
             employee_id (str): employee id
 
-        # TODO: response schema
+        References:
+            https://apidocs.hibob.com/reference#get_docs-people-id
         """
         return self.client.get(
             'docs/people/{employee_id}'.format(

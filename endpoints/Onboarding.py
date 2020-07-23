@@ -10,7 +10,8 @@ class Onboarding(BaseEndpoint):
         Get summary about all onboarding wizards.
         Wizard info includes Wizard Id, name and description.
 
-        # TODO: response schema
+        References:
+            https://apidocs.hibob.com/reference#get_onboarding-wizards
         """
         return self.client.get('onboarding/wizards')
 

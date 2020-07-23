@@ -15,6 +15,19 @@ class Client:
     def __init__(self, api_token):
         self.api_token = api_token
 
+    @staticmethod
+    def parse_response(response):
+        if response.headers['Content-Type'] != 'application/json':
+            log.debug('Response is not application/json, returning raw response')
+            return response
+
+        try:
+            return response.json()
+        except ValueError:
+            log.debug('Could not convert response to json, returning raw response')
+
+        return response
+
     def make_request(self, method, endpoint, json_body=None, query=None, body=None, files=None):
 
         methods = {
@@ -43,39 +56,29 @@ class Client:
             self.url + endpoint,
             **request_params
         )
-
+        parsed_response = self.parse_response(response)
         try:
             response.raise_for_status()
         except requests.HTTPError as error:
             log.exception(error)
             log.debug(response)
-            if isinstance(response, dict):
-                # response is parsed to json
-                raise HibobException(response.get('error'))
+            if isinstance(parsed_response, dict):
+                # response is json and was parsed to dict
+                raise HibobException(parsed_response.get('error'))
 
             # fallback to requests exception
             raise error
 
-        return response
+        return parsed_response
 
     def get(self, endpoint, query=None):
-        response = self.make_request('get', endpoint, query=query)
-
-        if response.headers['Content-Type'] != 'application/json':
-            log.debug('Response is not application/json, returning raw response')
-            return response
-
-        try:
-            return response.json()
-        except ValueError:
-            log.debug('Could not convert response to json, returning raw response')
-            return response
+        return self.make_request('get', endpoint, query=query)
 
     def post(self, endpoint, json_body=None, query=None, body=None, files=None):
-        return self.make_request('post', endpoint, json_body=json_body, query=query, body=body, files=files).json()
+        return self.make_request('post', endpoint, json_body=json_body, query=query, body=body, files=files)
 
     def put(self, endpoint, json_body=None, query=None, body=None, files=None):
-        return self.make_request('post', endpoint, json_body=json_body, query=query, body=body, files=files).json()
+        return self.make_request('post', endpoint, json_body=json_body, query=query, body=body, files=files)
 
     def delete(self, endpoint, json_body=None, query=None, body=None, files=None):
-        return self.make_request('post', endpoint, json_body=json_body, query=query, body=body, files=files).json()
+        return self.make_request('post', endpoint, json_body=json_body, query=query, body=body, files=files)

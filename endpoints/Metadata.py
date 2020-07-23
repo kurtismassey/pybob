@@ -9,7 +9,8 @@ class Metadata(BaseEndpoint):
         """
         Get all company lists
 
-        # TODO: response schema
+        References:
+            https://apidocs.hibob.com/reference#get_company-named-lists
         """
         return self.client.get('company/named-lists')
 
@@ -20,7 +21,8 @@ class Metadata(BaseEndpoint):
         Args:
             list_name (str): internal name of the list
 
-        # TODO: response schema
+        References:
+            https://apidocs.hibob.com/reference#get_company-named-lists-listname
         """
         return self.client.get(
             'company/named-lists/{list_name}'.format(
@@ -36,7 +38,8 @@ class Metadata(BaseEndpoint):
             list_name (str: internal name of the list
             name (str): Name of the item
 
-        # TODO: response schema
+        References:
+            https://apidocs.hibob.com/reference#post_company-named-lists-listname
         """
         return self.client.post(
             'company/named-lists/{list_name}'.format(

@@ -31,7 +31,8 @@ class TimeOff(BaseEndpoint):
             skip_manager_approval (bool): Admins only can skip the approval policy,
                 setting this field to true will create an approved request
 
-        # TODO: response schema
+        References:
+            https://apidocs.hibob.com/reference#post_timeoff-employees-id-requests
         """
         return self.client.post(
             'timeoff/employees/{employee_id}/requests'.format(
@@ -56,7 +57,9 @@ class TimeOff(BaseEndpoint):
             employee_id (str): employee id
             request_id (str): request id
 
-        # TODO: response schema
+
+        References:
+            https://apidocs.hibob.com/reference#get_timeoff-employees-id-requests-requestid
         """
         return self.client.get(
             'timeoff/employees/{employee_id}/requests/{request_id}'.format(
@@ -73,7 +76,8 @@ class TimeOff(BaseEndpoint):
             employee_id (str): employee id
             request_id (str): request id
 
-        # TODO: response schema
+        References:
+            https://apidocs.hibob.com/reference#delete_timeoff-employees-id-requests-requestid
         """
         return self.client.delete(
             'timeoff/employees/{employee_id}/requests/{request_id}'.format(
@@ -90,7 +94,8 @@ class TimeOff(BaseEndpoint):
             since (datetime.datetime): Timestamp starting from which to return the changes.
                 Should be in ISO-8601 format, e.g. 2007-04-05T14:30:24.345Z or 2007-04-05T12:30-02:00
 
-        # TODO: response schema
+        References:
+            https://apidocs.hibob.com/reference#get_timeoff-requests-changes
         """
         date_string = since.isoformat(timespec='milliseconds')
 
@@ -113,7 +118,8 @@ class TimeOff(BaseEndpoint):
             since (date): Start period date
             until (date): End period date
 
-        # TODO: response schema
+        References:
+            https://apidocs.hibob.com/reference#get_timeoff-whosout
         """
         return self.client.get(
             'timeoff/whosout',
@@ -131,7 +137,8 @@ class TimeOff(BaseEndpoint):
             today (date): Date to report out of the office.
                 If not specified, the date at UTC at the time of the request is used
 
-        # TODO: response schema
+        References:
+            https://apidocs.hibob.com/reference#get_timeoff-outtoday
         """
         if today is None:
             query = {}

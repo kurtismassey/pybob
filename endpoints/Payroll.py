@@ -13,7 +13,8 @@ class Payroll(BaseEndpoint):
             department (string): filter payroll for specific department
             show_inactive (bool): Show also inactive employees
 
-        # TODO: response schema
+        References:
+            https://apidocs.hibob.com/reference#get_payroll-history
         """
         return self.client.get(
             "people",

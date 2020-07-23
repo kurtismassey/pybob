@@ -12,7 +12,8 @@ class Reports(BaseEndpoint):
 
         Only viewable categories are returned.
 
-        # TODO: response schema
+        References:
+            https://apidocs.hibob.com/reference#get_company-reports
         """
         return self.client.get('company/reports')
 
@@ -30,7 +31,8 @@ class Reports(BaseEndpoint):
                 Requested language for the report columns in the format of locale (e.g. fr-FR),
                 if not provided, the user preferences locale is used.
 
-        # TODO: response schema
+        References:
+            https://apidocs.hibob.com/reference#get_company-reports-reportid-download
         """
         params = {
             'format': formatting,
