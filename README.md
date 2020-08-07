@@ -26,12 +26,12 @@ driver = Driver(
 # Read company people
 people = driver.people.list()
 ```
+For more detailed info check [wiki](https://github.com/uvoteam/python-hibob/wiki)
 
 ## Roadmap
 
 * Installation from [PyPi](https://pypi.org/)
 * Improved docstrings
-* Usage documentation on wiki
 * Unittests
 
 ## Contributing
