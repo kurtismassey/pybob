@@ -35,7 +35,7 @@ class Metadata(BaseEndpoint):
         Add a new item to an existing list
 
         Args:
-            list_name (str: internal name of the list
+            list_name (str): internal name of the list
             name (str): Name of the item
 
         References:
