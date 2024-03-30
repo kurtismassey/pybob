@@ -6,8 +6,12 @@ PyBob is an unofficial python SDK for the [Bob](https://www.hibob.com/) [API](ht
 
 ### Initialise
 
+```bash
+pip install pybob-sdk
+```
+
 ```python
-from pybob import Bob
+from pybob_sdk import Bob
 
 bob = Bob(
     service_account_id="YOUR_SERVICE_ACCOUNT_ID_HERE"
