@@ -1,18 +1,30 @@
 from .base import BobEndpoint
-from models.People import SearchModel, FilterModel, HumanReadableValues, TerminationReasonType
-from models.Payroll import PayFrequency, PayPeriod, Base, ExcercisePrice, VariablePayPeriod
+from models.People import (
+    SearchModel,
+    FilterModel,
+    HumanReadableValues,
+    TerminationReasonType,
+)
+from models.Payroll import (
+    PayFrequency,
+    PayPeriod,
+    Base,
+    ExcercisePrice,
+    VariablePayPeriod,
+)
 from pydantic import ValidationError
 from typing import Optional, List
 import json
 
+
 class People(BobEndpoint):
     def search(
-        self, 
-        fields: Optional[List[str]] = None, 
-        filters: Optional[List[FilterModel]] = None, 
-        showInactive: Optional[bool] = None, 
-        humanReadable: Optional[str] = None
-        ) -> List[dict]:
+        self,
+        fields: Optional[List[str]] = None,
+        filters: Optional[List[FilterModel]] = None,
+        showInactive: Optional[bool] = None,
+        humanReadable: Optional[str] = None,
+    ) -> List[dict]:
         """
         This API returns a list of requested employees with requested fields. The data is filtered based on the requested fields and access level of the logged-in user. Only viewable categories are returned.
 
@@ -33,25 +45,27 @@ class People(BobEndpoint):
             humanReadable = humanReadable.lower()
 
         search_parameters = SearchModel(
-            fields=fields, filters=filters, showInactive=showInactive, humanReadable=humanReadable
-            )
-        
+            fields=fields,
+            filters=filters,
+            showInactive=showInactive,
+            humanReadable=humanReadable,
+        )
+
         json_body = {}
 
         if search_parameters.fields:
             json_body["fields"] = search_parameters.fields
         if search_parameters.filters:
-            json_body["filters"] = [filter.model_dump() for filter in search_parameters.filters]
+            json_body["filters"] = [
+                filter.model_dump() for filter in search_parameters.filters
+            ]
         if search_parameters.showInactive:
             json_body["showInactive"] = search_parameters.showInactive
         if search_parameters.humanReadable:
             json_body["humanReadable"] = search_parameters.humanReadable
 
-        return self.client.post(
-            "people/search",
-            json_body=json_body
-        )
-    
+        return self.client.post("people/search", json_body=json_body)
+
     def read(self, sortBy: Optional[str] = None):
         """
         Read the public profile section of all active employees.
@@ -66,19 +80,20 @@ class People(BobEndpoint):
             https://apidocs.hibob.com/reference/get_profiles
         """
 
-        return self.client.get(
-            "profiles",
-            query={
-                "sortBy": sortBy
-            }
-            )
-    
+        return self.client.get("profiles", query={"sortBy": sortBy})
+
     @property
     def employee(self):
         return Employee(self.client)
-    
+
+
 class Employee(BobEndpoint):
-    def get(self, identifier: str, fields: Optional[List[str]] = None, humanReadable: Optional[str] = None) -> dict:
+    def get(
+        self,
+        identifier: str,
+        fields: Optional[List[str]] = None,
+        humanReadable: Optional[str] = None,
+    ) -> dict:
         """
         Read company people by id or email
 
@@ -99,13 +114,18 @@ class Employee(BobEndpoint):
         if humanReadable:
             humanReadable = HumanReadableValues(humanReadable.lower())
             json_body["humanReadable"] = humanReadable
-            
-        return self.client.post(
-            f"people/{identifier}",
-            json_body=json_body
-            )
 
-    def create(self, firstName: str, surname: str, email: str, site: str, startDate: str, **kwargs):
+        return self.client.post(f"people/{identifier}", json_body=json_body)
+
+    def create(
+        self,
+        firstName: str,
+        surname: str,
+        email: str,
+        site: str,
+        startDate: str,
+        **kwargs,
+    ):
         """
         Create a new employee
 
@@ -124,10 +144,7 @@ class Employee(BobEndpoint):
         json_body["firstName"] = firstName
         json_body["surname"] = surname
         json_body["email"] = email
-        json_body["work"] = {
-            "site": site,
-            "startDate": startDate
-        }
+        json_body["work"] = {"site": site, "startDate": startDate}
 
         for key, value in kwargs.items():
             json_body[key] = value
@@ -138,13 +155,10 @@ class Employee(BobEndpoint):
                 "firstName": firstName,
                 "surname": surname,
                 "email": email,
-                "work": {
-                    "site": site,
-                    "startDate": startDate
-                }
-            }
+                "work": {"site": site, "startDate": startDate},
+            },
         )
-    
+
     def update(self, identifier: str, **kwargs):
         """
         Update an employee
@@ -164,11 +178,8 @@ class Employee(BobEndpoint):
         for key, value in kwargs.items():
             json_body[key] = value
 
-        return self.client.put(
-            f"people/{identifier}",
-            json_body=json_body
-        )
-    
+        return self.client.put(f"people/{identifier}", json_body=json_body)
+
     def revoke(self, identifier: str):
         """
         Revoke employee access
@@ -182,11 +193,17 @@ class Employee(BobEndpoint):
         References:
             https://apidocs.hibob.com/reference/delete_people-identifier
         """
-        return self.client.post(
-            f"employees/{identifier}/uninvite"
-        )
-    
-    def terminate(self, identifier: str, terminationDate: str, terminationReason: Optional[str] = None, reasonType: Optional[str] = None, noticePeriod: Optional[dict] = None, lastDayOfWork: Optional[str] = None):
+        return self.client.post(f"employees/{identifier}/uninvite")
+
+    def terminate(
+        self,
+        identifier: str,
+        terminationDate: str,
+        terminationReason: Optional[str] = None,
+        reasonType: Optional[str] = None,
+        noticePeriod: Optional[dict] = None,
+        lastDayOfWork: Optional[str] = None,
+    ):
         """
         Terminate an employee
 
@@ -206,7 +223,7 @@ class Employee(BobEndpoint):
         """
         json_body = {}
 
-        json_body["terminationDate"] = terminationDate,
+        json_body["terminationDate"] = (terminationDate,)
 
         if terminationReason:
             json_body["terminationReason"] = terminationReason
@@ -219,10 +236,9 @@ class Employee(BobEndpoint):
             json_body["lastDayOfWork"] = lastDayOfWork
 
         return self.client.post(
-            f"employees/{identifier}/terminate",
-            json_body=json_body
+            f"employees/{identifier}/terminate", json_body=json_body
         )
-    
+
     def invite(self, employeeId: str, welcomeWizardId: int):
         """
         Invite an employee
@@ -242,11 +258,12 @@ class Employee(BobEndpoint):
         json_body["welcomeWizardId"] = welcomeWizardId
 
         return self.client.post(
-            f"employees/{employeeId}/invitations",
-            json_body=json_body
+            f"employees/{employeeId}/invitations", json_body=json_body
         )
-    
-    def set_start_date(self, employeeId: str, startDate: str, reason: Optional[str] = None):
+
+    def set_start_date(
+        self, employeeId: str, startDate: str, reason: Optional[str] = None
+    ):
         """
         Set or update an employee's start date
 
@@ -264,16 +281,17 @@ class Employee(BobEndpoint):
         json_body = {}
 
         json_body["startDate"] = startDate
-        
+
         if reason:
             json_body["reason"] = reason
 
         return self.client.post(
-            f"employees/{employeeId}/start-date",
-            json_body=json_body
+            f"employees/{employeeId}/start-date", json_body=json_body
         )
-    
-    def get_avatar(self, email: Optional[str] = None, employeeId: Optional[str] = None) -> str: 
+
+    def get_avatar(
+        self, email: Optional[str] = None, employeeId: Optional[str] = None
+    ) -> str:
         """
         Read avatar for an employee email or employeeId
 
@@ -295,15 +313,10 @@ class Employee(BobEndpoint):
         if employeeId:
             endpoint = f"avatars/{employeeId}"
         if email:
-            query = {
-                "email": email
-            }
+            query = {"email": email}
 
-        return self.client.get(
-            endpoint, 
-            query=query
-        )
-    
+        return self.client.get(endpoint, query=query)
+
     def upload_avatar(self, employeeId: str, url: str):
         """
         Upload an avatar for an employee
@@ -318,13 +331,8 @@ class Employee(BobEndpoint):
         References:
             https://apidocs.hibob.com/reference/put_avatars-employeeid
         """
-        return self.client.put(
-            f"avatars/{employeeId}",
-            json_body={
-                "url": url
-            }
-        )
-    
+        return self.client.put(f"avatars/{employeeId}", json_body={"url": url})
+
     def update_email(self, employeeId: str, email: str):
         """
         Update an employee's email
@@ -339,13 +347,8 @@ class Employee(BobEndpoint):
         References:
             https://apidocs.hibob.com/reference/put_people-id-email
         """
-        return self.client.put(
-            f"people/{employeeId}/email",
-            json_body={
-                "email": email
-            }
-        )
-    
+        return self.client.put(f"people/{employeeId}/email", json_body={"email": email})
+
     def list_work_history(self, employeeId: str):
         """
         List an employee's work history
@@ -359,11 +362,21 @@ class Employee(BobEndpoint):
         References:
             https://apidocs.hibob.com/reference/get_people-id-work
         """
-        return self.client.get(
-            f"people/{employeeId}/work"
-        )
-    
-    def create_work_entry(self, employeeId: str, effectiveDate: str, title: Optional[str] = None, department: Optional[str] = None, id: Optional[int] = None, reason: Optional[str] = None, site: Optional[str] = None, siteId: Optional[int] = None, reportsTo: Optional[dict] = None, customColumns: Optional[dict] = None):
+        return self.client.get(f"people/{employeeId}/work")
+
+    def create_work_entry(
+        self,
+        employeeId: str,
+        effectiveDate: str,
+        title: Optional[str] = None,
+        department: Optional[str] = None,
+        id: Optional[int] = None,
+        reason: Optional[str] = None,
+        site: Optional[str] = None,
+        siteId: Optional[int] = None,
+        reportsTo: Optional[dict] = None,
+        customColumns: Optional[dict] = None,
+    ):
         """
         Create a new work entry for a given employee.
 
@@ -405,13 +418,23 @@ class Employee(BobEndpoint):
             json_body["reportsTo"] = reportsTo
         if customColumns:
             json_body["customColumns"] = customColumns
-        
-        return self.client.post(
-            f"people/{employeeId}/work",
-            json_body=json_body
-        )
-    
-    def update_work_entry(self, employeeId: str, entryId: int, effectiveDate: str, id: Optional[int] = None, title: Optional[str] = None, department: Optional[str] = None, reason: Optional[str] = None, site: Optional[str] = None, siteId: Optional[int] = None, reportsTo: Optional[dict] = None, customColumns: Optional[dict] = None):
+
+        return self.client.post(f"people/{employeeId}/work", json_body=json_body)
+
+    def update_work_entry(
+        self,
+        employeeId: str,
+        entryId: int,
+        effectiveDate: str,
+        id: Optional[int] = None,
+        title: Optional[str] = None,
+        department: Optional[str] = None,
+        reason: Optional[str] = None,
+        site: Optional[str] = None,
+        siteId: Optional[int] = None,
+        reportsTo: Optional[dict] = None,
+        customColumns: Optional[dict] = None,
+    ):
         """
         Update a work entry from employee's work history
 
@@ -453,12 +476,11 @@ class Employee(BobEndpoint):
             json_body["reportsTo"] = reportsTo
         if customColumns:
             json_body["customColumns"] = customColumns
-        
+
         return self.client.put(
-            f"people/{employeeId}/work/{entryId}",
-            json_body=json_body
+            f"people/{employeeId}/work/{entryId}", json_body=json_body
         )
-    
+
     def delete_work_entry(self, employeeId: str, entryId: int):
         """
         Deletes a work entry from a given employee's work history.
@@ -473,10 +495,8 @@ class Employee(BobEndpoint):
         References:
             https://api.hibob.com/v1/people/{id}/work/{entry_id}
         """
-        return self.client.delete(
-            f"people/{employeeId}/work/{entryId}"
-        )
-    
+        return self.client.delete(f"people/{employeeId}/work/{entryId}")
+
     def list_employment_history(self, employeeId: str):
         """
         List an employee's employment history
@@ -490,11 +510,18 @@ class Employee(BobEndpoint):
         References:
             https://api.hibob.com/v1/people/{id}/employment
         """
-        return self.client.get(
-            f"people/{employeeId}/employment"
-        )
-    
-    def create_employment_entry(self, employeeId: str, effectiveDate: str, id: Optional[int] = None, reason: Optional[str] = None, contract: Optional[str] = None, type: Optional[str] = None, salaryPayType: Optional[str] = None):
+        return self.client.get(f"people/{employeeId}/employment")
+
+    def create_employment_entry(
+        self,
+        employeeId: str,
+        effectiveDate: str,
+        id: Optional[int] = None,
+        reason: Optional[str] = None,
+        contract: Optional[str] = None,
+        type: Optional[str] = None,
+        salaryPayType: Optional[str] = None,
+    ):
         """
         Create a new employment entry for a given employee.
 
@@ -527,12 +554,19 @@ class Employee(BobEndpoint):
         if salaryPayType:
             json_body["salaryPayType"] = salaryPayType
 
-        return self.client.post(
-            f"people/{employeeId}/employment",
-            json_body=json_body
-        )
-    
-    def update_employment_entry(self, employeeId: str, entryId: int, effectiveDate: str, id: Optional[int] = None, reason: Optional[str] = None, contract: Optional[str] = None, type: Optional[str] = None, salaryPayType: Optional[str] = None):
+        return self.client.post(f"people/{employeeId}/employment", json_body=json_body)
+
+    def update_employment_entry(
+        self,
+        employeeId: str,
+        entryId: int,
+        effectiveDate: str,
+        id: Optional[int] = None,
+        reason: Optional[str] = None,
+        contract: Optional[str] = None,
+        type: Optional[str] = None,
+        salaryPayType: Optional[str] = None,
+    ):
         """
         Update an employment entry from a given employee's employment history
 
@@ -566,12 +600,11 @@ class Employee(BobEndpoint):
             json_body["type"] = type
         if salaryPayType:
             json_body["salaryPayType"] = salaryPayType
-            
+
         return self.client.put(
-            f"people/{employeeId}/employment/{entryId}",
-            json_body=json_body
+            f"people/{employeeId}/employment/{entryId}", json_body=json_body
         )
-    
+
     def delete_employment_entry(self, employeeId: str, entryId: int):
         """
         Deletes an employment entry from a given employee's employment history.
@@ -586,10 +619,8 @@ class Employee(BobEndpoint):
         References:
             https://apidocs.hibob.com/reference/delete_people-id-employment-entry-id
         """
-        return self.client.delete(
-            f"people/{employeeId}/employment/{entryId}"
-        )
-    
+        return self.client.delete(f"people/{employeeId}/employment/{entryId}")
+
     def list_lifecycle_history(self, employeeId: str):
         """
         List an employee's life-cycle status history.
@@ -603,10 +634,8 @@ class Employee(BobEndpoint):
         References:
             https://apidocs.hibob.com/reference/get_people-id-lifecycle
         """
-        return self.client.get(
-            f"people/{employeeId}/lifecycle"
-        )
-    
+        return self.client.get(f"people/{employeeId}/lifecycle")
+
     def list_salary_history(self, employeeId: str):
         """
         List an employee's salary history.
@@ -620,11 +649,18 @@ class Employee(BobEndpoint):
         References:
             https://apidocs.hibob.com/reference/get_people-id-salaries
         """
-        return self.client.get(
-            f"people/{employeeId}/salaries"
-        )
-    
-    def create_salary_entry(self, employeeId: str, effectiveDate: str, base: dict, payPeriod: str, payFrequency: Optional[str] = None, id: Optional[int] = None, reason: Optional[str] = None):
+        return self.client.get(f"people/{employeeId}/salaries")
+
+    def create_salary_entry(
+        self,
+        employeeId: str,
+        effectiveDate: str,
+        base: dict,
+        payPeriod: str,
+        payFrequency: Optional[str] = None,
+        id: Optional[int] = None,
+        reason: Optional[str] = None,
+    ):
         """
         Create a new salary entry for a given employee.
 
@@ -645,20 +681,19 @@ class Employee(BobEndpoint):
         """
         json_body = {}
         json_body["effectiveDate"] = effectiveDate
-        json_body["base"] = Base(value=base["value"], currency=base["currency"]).model_dump_json()
+        json_body["base"] = Base(
+            value=base["value"], currency=base["currency"]
+        ).model_dump_json()
         json_body["payPeriod"] = PayPeriod(payPeriod).value
 
         if id:
             json_body["id"] = id
         if reason:
             json_body["reason"] = reason
-        if payFrequency: 
+        if payFrequency:
             json_body["payFrequency"] = PayFrequency(payFrequency).value
 
-        return self.client.post(
-            f"people/{employeeId}/salaries",
-            json_body=json_body
-        )
+        return self.client.post(f"people/{employeeId}/salaries", json_body=json_body)
 
     def delete_salary_entry(self, employeeId: str, entryId: int):
         """
@@ -674,10 +709,8 @@ class Employee(BobEndpoint):
         References:
             https://apidocs.hibob.com/reference/delete_people-id-salaries-entry-id
         """
-        return self.client.delete(
-            f"people/{employeeId}/salaries/{entryId}"
-        )
-    
+        return self.client.delete(f"people/{employeeId}/salaries/{entryId}")
+
     def list_equity_grants(self, employeeId: str):
         """
         List the employee's equity grants.
@@ -691,11 +724,27 @@ class Employee(BobEndpoint):
         References:
             https://apidocs.hibob.com/reference/get_people-id-equities
         """
-        return self.client.get(
-            f"people/{employeeId}/equities"
-        )
-    
-    def create_equity_grant(self, employeeId: str, effectiveDate: str, quantity: float, equityType: str, excerisePrice: dict, id: Optional[int] = None, reason: Optional[str] = None, vestingCommencementDate: Optional[str] = None, consentNumber: Optional[str] = None, grantDate: Optional[str] = None, optionExpiration: Optional[str] = None, vestingTerm: Optional[str] = None, grantType: Optional[str] = None, vestingSchedule: Optional[float] = None, grantNumber: Optional[float] = None, grantStatus: Optional[str] = None):
+        return self.client.get(f"people/{employeeId}/equities")
+
+    def create_equity_grant(
+        self,
+        employeeId: str,
+        effectiveDate: str,
+        quantity: float,
+        equityType: str,
+        excerisePrice: dict,
+        id: Optional[int] = None,
+        reason: Optional[str] = None,
+        vestingCommencementDate: Optional[str] = None,
+        consentNumber: Optional[str] = None,
+        grantDate: Optional[str] = None,
+        optionExpiration: Optional[str] = None,
+        vestingTerm: Optional[str] = None,
+        grantType: Optional[str] = None,
+        vestingSchedule: Optional[float] = None,
+        grantNumber: Optional[float] = None,
+        grantStatus: Optional[str] = None,
+    ):
         """
         Create a new equity grant for a given employee.
 
@@ -732,7 +781,9 @@ class Employee(BobEndpoint):
         json_body["effectiveDate"] = effectiveDate
         json_body["quantity"] = quantity
         json_body["equityType"] = equityType
-        json_body["exercisePrice"] = ExcercisePrice(value=excerisePrice["value"], currency=excerisePrice["currency"]).model_dump_json()
+        json_body["exercisePrice"] = ExcercisePrice(
+            value=excerisePrice["value"], currency=excerisePrice["currency"]
+        ).model_dump_json()
 
         if id:
             json_body["id"] = id
@@ -757,12 +808,28 @@ class Employee(BobEndpoint):
         if grantStatus:
             json_body["grantStatus"] = grantStatus
 
-        return self.client.post(
-            f"people/{employeeId}/equities",
-            json_body=json_body
-        )
-    
-    def update_equity_grant(self, employeeId: str, entryId: int, effectiveDate: str, quantity: float, equityType: str, excerisePrice: dict, id: Optional[int] = None, reason: Optional[str] = None, vestingCommencementDate: Optional[str] = None, consentNumber: Optional[str] = None, grantDate: Optional[str] = None, optionExpiration: Optional[str] = None, vestingTerm: Optional[str] = None, grantType: Optional[str] = None, vestingSchedule: Optional[float] = None, grantNumber: Optional[float] = None, grantStatus: Optional[str] = None):
+        return self.client.post(f"people/{employeeId}/equities", json_body=json_body)
+
+    def update_equity_grant(
+        self,
+        employeeId: str,
+        entryId: int,
+        effectiveDate: str,
+        quantity: float,
+        equityType: str,
+        excerisePrice: dict,
+        id: Optional[int] = None,
+        reason: Optional[str] = None,
+        vestingCommencementDate: Optional[str] = None,
+        consentNumber: Optional[str] = None,
+        grantDate: Optional[str] = None,
+        optionExpiration: Optional[str] = None,
+        vestingTerm: Optional[str] = None,
+        grantType: Optional[str] = None,
+        vestingSchedule: Optional[float] = None,
+        grantNumber: Optional[float] = None,
+        grantStatus: Optional[str] = None,
+    ):
         """
         Update an equity grant for a given employee.
 
@@ -798,7 +865,9 @@ class Employee(BobEndpoint):
         json_body["effectiveDate"] = effectiveDate
         json_body["quantity"] = quantity
         json_body["equityType"] = equityType
-        json_body["exercisePrice"] = ExcercisePrice(value=excerisePrice["value"], currency=excerisePrice["currency"]).model_dump_json()
+        json_body["exercisePrice"] = ExcercisePrice(
+            value=excerisePrice["value"], currency=excerisePrice["currency"]
+        ).model_dump_json()
 
         if id:
             json_body["id"] = id
@@ -824,10 +893,9 @@ class Employee(BobEndpoint):
             json_body["grantStatus"] = grantStatus
 
         return self.client.put(
-            f"people/{employeeId}/equities/{entryId}",
-            json_body=json_body
+            f"people/{employeeId}/equities/{entryId}", json_body=json_body
         )
-    
+
     def delete_equity_grant(self, employeeId: str, entryId: int):
         """
         Deletes an equity grant for an employee.
@@ -842,9 +910,7 @@ class Employee(BobEndpoint):
         References:
             https://apidocs.hibob.com/reference/delete_people-id-equities-entry-id
         """
-        return self.client.delete(
-            f"people/{employeeId}/equities/{entryId}"
-        )
+        return self.client.delete(f"people/{employeeId}/equities/{entryId}")
 
     def list_variable_payments(self, employeeId: str) -> List[dict]:
         """
@@ -860,8 +926,20 @@ class Employee(BobEndpoint):
             https://apidocs.hibob.com/reference/get_people-id-variable
         """
         return self.client.get(f"people/{employeeId}/variable")
-    
-    def create_variable_payment(self, employeeId: str, effectiveDate: str, amount: dict, paymentPeriod: str, id: Optional[int] = None, reason: Optional[str] = None, variableType: Optional[str] = None, companyPercent: Optional[float] = None, departmentPercent: Optional[float] = None, individualPercent: Optional[float] = None):
+
+    def create_variable_payment(
+        self,
+        employeeId: str,
+        effectiveDate: str,
+        amount: dict,
+        paymentPeriod: str,
+        id: Optional[int] = None,
+        reason: Optional[str] = None,
+        variableType: Optional[str] = None,
+        companyPercent: Optional[float] = None,
+        departmentPercent: Optional[float] = None,
+        individualPercent: Optional[float] = None,
+    ):
         """
         Creates a new variable payment for a given employee.
 
@@ -887,7 +965,9 @@ class Employee(BobEndpoint):
         """
         json_body = {}
         json_body["effectiveDate"] = effectiveDate
-        json_body["amount"] = Base(value=amount["value"], currency=amount["currency"]).model_dump_json()
+        json_body["amount"] = Base(
+            value=amount["value"], currency=amount["currency"]
+        ).model_dump_json()
         json_body["paymentPeriod"] = VariablePayPeriod(paymentPeriod).value
 
         if id:
@@ -902,11 +982,8 @@ class Employee(BobEndpoint):
             json_body["departmentPercent"] = departmentPercent
         if individualPercent:
             json_body["individualPercent"] = individualPercent
-        
-        return self.client.post(
-            f"people/{employeeId}/variable",
-            json_body=json_body
-        )
+
+        return self.client.post(f"people/{employeeId}/variable", json_body=json_body)
 
     def delete_variable_record(self, employeeId: str, entryId: int):
         """
@@ -922,10 +999,8 @@ class Employee(BobEndpoint):
         References:
             https://apidocs.hibob.com/reference/delete_people-id-variable-entry-id
         """
-        return self.client.delete(
-            f"people/{employeeId}/variable/{entryId}"
-        )
-    
+        return self.client.delete(f"people/{employeeId}/variable/{entryId}")
+
     def list_training_records(self, employeeId: str) -> List[dict]:
         """
         List the employee's training records.
@@ -940,7 +1015,7 @@ class Employee(BobEndpoint):
             https://apidocs.hibob.com/reference/get_people-id-training
         """
         return self.client.get(f"people/{employeeId}/training")
-    
+
     def create_training_record(
         self,
         employeeId: str,
@@ -952,7 +1027,7 @@ class Employee(BobEndpoint):
         reason: Optional[str] = None,
         startDate: Optional[str] = None,
         endDate: Optional[str] = None,
-        documentId: Optional[int] = None
+        documentId: Optional[int] = None,
     ):
         """
         Creates a new training record for a given employee.
@@ -983,7 +1058,9 @@ class Employee(BobEndpoint):
 
         json_body["effectiveDate"] = effectiveDate
         json_body["name"] = name
-        json_body["cost"] = Base(value=cost["value"], currency=cost["currency"]).model_dump_json()
+        json_body["cost"] = Base(
+            value=cost["value"], currency=cost["currency"]
+        ).model_dump_json()
 
         if description:
             json_body["description"] = description
@@ -1000,10 +1077,7 @@ class Employee(BobEndpoint):
         if documentId:
             json_body["documentId"] = documentId
 
-        return self.client.post(
-            f"people/{employeeId}/training",
-            json_body=json_body
-        )
+        return self.client.post(f"people/{employeeId}/training", json_body=json_body)
 
     def delete_training_record(self, employeeId: str, entryId: int):
         """
@@ -1019,6 +1093,4 @@ class Employee(BobEndpoint):
         References:
             https://apidocs.hibob.com/reference/delete_people-id-training-entry-id
         """
-        return self.client.delete(
-            f"people/{employeeId}/training/{entryId}"
-        )
+        return self.client.delete(f"people/{employeeId}/training/{entryId}")

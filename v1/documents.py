@@ -2,8 +2,16 @@ from .base import BobEndpoint
 from typing import Optional, List
 import mimetypes
 
+
 class Documents(BobEndpoint):
-    def upload_document(self, employeeId: str, folderId: str = "shared", documentName: Optional[str] = None, documentUrl: Optional[str] = None, tags: Optional[List[str]] = None):
+    def upload_document(
+        self,
+        employeeId: str,
+        folderId: str = "shared",
+        documentName: Optional[str] = None,
+        documentUrl: Optional[str] = None,
+        tags: Optional[List[str]] = None,
+    ):
         """
         Upload a document to the employee's folder.
 
@@ -13,7 +21,7 @@ class Documents(BobEndpoint):
             document_name: Document name.
             document_url: URL of the document to upload.
             tags: A list of tags to associate with the document.
-        
+
         Responses
             200: Upload success.
 
@@ -39,11 +47,8 @@ class Documents(BobEndpoint):
         if tags:
             json_body["tags"] = tags
 
-        return self.client.post(
-            endpoint, 
-            json_body=json_body
-        )
-    
+        return self.client.post(endpoint, json_body=json_body)
+
     def upload_file(self, employeeId: str, file: str, folderId: str = "shared"):
         """
         Upload a file to the employee's folder.
@@ -76,10 +81,9 @@ class Documents(BobEndpoint):
         mime_type, _ = mimetypes.guess_type(file)
 
         return self.client.post(
-            endpoint, 
-            files={"file": (file, open(file, "rb"), mime_type)}
+            endpoint, files={"file": (file, open(file, "rb"), mime_type)}
         )
-    
+
     def delete_document(self, employeeId: str, docId: str, folderId: str):
         """
         Delete a specific document from the employee's shared folder.
@@ -111,7 +115,7 @@ class Documents(BobEndpoint):
                 endpoint = f"docs/people/{employeeId}/folders/{folderId}/{docId}"
 
         return self.client.delete(endpoint)
-    
+
     def download_documents(self, employeeId: str):
         """
         Download employee's documents.
@@ -129,6 +133,4 @@ class Documents(BobEndpoint):
             https://apidocs.hibob.com/reference/get_docs-people-id
         """
 
-        return self.client.get(
-            f"docs/people/{employeeId}"
-        )
+        return self.client.get(f"docs/people/{employeeId}")

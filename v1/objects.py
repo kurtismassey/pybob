@@ -1,8 +1,14 @@
 from .base import BobEndpoint
 from typing import Optional, List
 
+
 class Objects(BobEndpoint):
-    def read_company_positions(self, fields: List[str], filters: List[dict], includeHumnaReadable: Optional[bool] = None):
+    def read_company_positions(
+        self,
+        fields: List[str],
+        filters: List[dict],
+        includeHumnaReadable: Optional[bool] = None,
+    ):
         """
         Read company positions.
 
@@ -25,7 +31,4 @@ class Objects(BobEndpoint):
         if includeHumnaReadable:
             json_body["includeHumanReadable"] = includeHumnaReadable
 
-        return self.client.post(
-            'objects/position/search',
-            json_body=json_body
-        )
+        return self.client.post("objects/position/search", json_body=json_body)

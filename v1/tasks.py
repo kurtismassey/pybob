@@ -2,6 +2,7 @@ from .base import BobEndpoint
 from models.Tasks import Task
 from typing import Optional
 
+
 class Tasks(BobEndpoint):
     def read(self):
         """
@@ -10,12 +11,30 @@ class Tasks(BobEndpoint):
         References:
             https://apidocs.hibob.com/reference/get_tasks
         """
-        response = self.client.get('tasks')
-        
-        tasks = [Task(id=task["id"], owner=task["owner"], title=task["title"], requestedFor=task["requestedFor"], due=task["due"], linkInBob=task["linkInBob"], set=task["set"], workflow=task["workflow"], ordinalInWorkflow=task["ordinalInWorkflow"], description=task["description"], status=task["status"], completionDate=task["completionDate"], employeeGroupId=task["employeeGroupId"], companyId=task["companyId"]) for task in response["tasks"]]
+        response = self.client.get("tasks")
+
+        tasks = [
+            Task(
+                id=task["id"],
+                owner=task["owner"],
+                title=task["title"],
+                requestedFor=task["requestedFor"],
+                due=task["due"],
+                linkInBob=task["linkInBob"],
+                set=task["set"],
+                workflow=task["workflow"],
+                ordinalInWorkflow=task["ordinalInWorkflow"],
+                description=task["description"],
+                status=task["status"],
+                completionDate=task["completionDate"],
+                employeeGroupId=task["employeeGroupId"],
+                companyId=task["companyId"],
+            )
+            for task in response["tasks"]
+        ]
 
         return tasks
-    
+
     def read_specific_employee(self, employeeId: str, taskStatus: Optional[str] = None):
         """
         Returns a list of all tasks for a specific employee
@@ -32,15 +51,30 @@ class Tasks(BobEndpoint):
         if taskStatus:
             query["taskStatus"] = taskStatus
 
-        response = self.client.get(
-            f'tasks/people/{employeeId}',
-            query=query
+        response = self.client.get(f"tasks/people/{employeeId}", query=query)
+
+        tasks = [
+            Task(
+                id=task["id"],
+                owner=task["owner"],
+                title=task["title"],
+                requestedFor=task["requestedFor"],
+                due=task["due"],
+                linkInBob=task["linkInBob"],
+                set=task["set"],
+                workflow=task["workflow"],
+                ordinalInWorkflow=task["ordinalInWorkflow"],
+                description=task["description"],
+                status=task["status"],
+                completionDate=task["completionDate"],
+                employeeGroupId=task["employeeGroupId"],
+                companyId=task["companyId"],
             )
-        
-        tasks = [Task(id=task["id"], owner=task["owner"], title=task["title"], requestedFor=task["requestedFor"], due=task["due"], linkInBob=task["linkInBob"], set=task["set"], workflow=task["workflow"], ordinalInWorkflow=task["ordinalInWorkflow"], description=task["description"], status=task["status"], completionDate=task["completionDate"], employeeGroupId=task["employeeGroupId"], companyId=task["companyId"]) for task in response["tasks"]]
+            for task in response["tasks"]
+        ]
 
         return tasks
-    
+
     def mark_task_complete(self, task_id: str):
         """
         Marks a task as complete
@@ -51,4 +85,4 @@ class Tasks(BobEndpoint):
         References:
             https://apidocs.hibob.com/reference/post_tasks-taskid-complete
         """
-        return self.client.post(f'tasks/{task_id}/complete')
+        return self.client.post(f"tasks/{task_id}/complete")

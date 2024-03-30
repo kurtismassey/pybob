@@ -1,12 +1,14 @@
 from pydantic import BaseModel
 from typing import Optional
 
+
 class Owner(BaseModel):
     id: str
     firstName: str
     surname: str
     email: str
     displayName: str
+
 
 class Task(BaseModel):
     id: int

@@ -1,8 +1,11 @@
 from .base import BobEndpoint
 from typing import List
 
+
 class Attendance(BobEndpoint):
-    def import_attendance_data(self, importMethod: str, idType: str, requests: List[dict], dateTimeFormat: str):
+    def import_attendance_data(
+        self, importMethod: str, idType: str, requests: List[dict], dateTimeFormat: str
+    ):
         """
         Import attendance data.
 
@@ -17,11 +20,11 @@ class Attendance(BobEndpoint):
                 clockIn (str): timestamp
                 clockOut (str): timestamp
             dateTimeFormat (str): Allows to set custom date format for the date-time values sent in the requests.
-        
+
         Returns:
             None
 
-        References: 
+        References:
             https://apidocs.hibob.com/reference/post_attendance-import-importmethod
         """
         json_body = {}
@@ -31,6 +34,5 @@ class Attendance(BobEndpoint):
         json_body["dateTimeFormat"] = dateTimeFormat
 
         return self.client.post(
-            f"attendance/import/{importMethod}",
-            json_body=json_body
+            f"attendance/import/{importMethod}", json_body=json_body
         )

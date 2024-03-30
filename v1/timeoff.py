@@ -1,26 +1,27 @@
 from .base import BobEndpoint
 from typing import Optional, List
 
+
 class TimeOff(BobEndpoint):
     def new_request(
-            self, 
-            employeeId: str, 
-            policyType: str,
-            startDate: str, 
-            requestRangeType: Optional[str] = None, 
-            startDatePortion: Optional[str] = None, 
-            endDate: Optional[str] = None, 
-            hours: Optional[int] = None, 
-            minutes: Optional[int] = None, 
-            endDatePortion: Optional[str] = None, 
-            dayPortion: Optional[str] = None, 
-            dailyHours: Optional[int] = None, 
-            dailyMinutes: Optional[int] = None, 
-            skipManagerApproval: Optional[bool] = None, 
-            approver: Optional[str] = None, 
-            description: Optional[str] = None, 
-            reasonCode: Optional[int] = None
-        ):
+        self,
+        employeeId: str,
+        policyType: str,
+        startDate: str,
+        requestRangeType: Optional[str] = None,
+        startDatePortion: Optional[str] = None,
+        endDate: Optional[str] = None,
+        hours: Optional[int] = None,
+        minutes: Optional[int] = None,
+        endDatePortion: Optional[str] = None,
+        dayPortion: Optional[str] = None,
+        dailyHours: Optional[int] = None,
+        dailyMinutes: Optional[int] = None,
+        skipManagerApproval: Optional[bool] = None,
+        approver: Optional[str] = None,
+        description: Optional[str] = None,
+        reasonCode: Optional[int] = None,
+    ):
         """
         Submit a new time off request.
 
@@ -59,7 +60,7 @@ class TimeOff(BobEndpoint):
         Reference:
             https://apidocs.hibob.com/reference/post_timeoff-employees-id-requests
         """
-        
+
         json_body = {}
 
         json_body["policyType"] = policyType
@@ -93,22 +94,21 @@ class TimeOff(BobEndpoint):
             json_body["reasonCode"] = reasonCode
 
         return self.client.post(
-            f'timeoff/employees/{employeeId}/requests',
-            json_body=json_body
+            f"timeoff/employees/{employeeId}/requests", json_body=json_body
         )
-    
+
     def new_diff_hours_request(
-        self, 
-        employeeId: str, 
+        self,
+        employeeId: str,
         policyType: str,
-        startDate: str, 
-        endDate: str, 
-        durations: List[dict], 
-        skipManagerApproval: Optional[bool] = None, 
-        approver: Optional[str] = None, 
-        description: Optional[str] = None, 
-        reasonCode: Optional[int] = None
-        ):
+        startDate: str,
+        endDate: str,
+        durations: List[dict],
+        skipManagerApproval: Optional[bool] = None,
+        approver: Optional[str] = None,
+        description: Optional[str] = None,
+        reasonCode: Optional[int] = None,
+    ):
         """
         Submit a new time off request of different hours per day.
 
@@ -138,7 +138,7 @@ class TimeOff(BobEndpoint):
         Reference:
             https://apidocs.hibob.com/reference/post_timeoff-employees-id-diffhours-requests
         """
-        
+
         json_body = {}
 
         json_body["policyType"] = policyType
@@ -154,12 +154,11 @@ class TimeOff(BobEndpoint):
             json_body["description"] = description
         if reasonCode:
             json_body["reasonCode"] = reasonCode
-        
+
         return self.client.post(
-            f'timeoff/employees/{employeeId}/diffHours/requests',
-            json_body=json_body
+            f"timeoff/employees/{employeeId}/diffHours/requests", json_body=json_body
         )
-    
+
     def get_request_details(self, employeeId: str, requestId: int):
         """
         Get the details of an existing timeoff request.
@@ -175,10 +174,8 @@ class TimeOff(BobEndpoint):
         Reference:
             https://apidocs.hibob.com/reference/get_timeoff-employees-id-requests-requestid
         """
-        return self.client.get(
-            f'timeoff/employees/{employeeId}/requests/{requestId}'
-        )
-    
+        return self.client.get(f"timeoff/employees/{employeeId}/requests/{requestId}")
+
     def cancel_request(self, employeeId: str, requestId: int):
         """
         Cancel an existing timeoff request.
@@ -194,10 +191,12 @@ class TimeOff(BobEndpoint):
             https://apidocs.hibob.com/reference/delete_timeoff-employees-id-requests-requestid
         """
         return self.client.delete(
-            f'timeoff/employees/{employeeId}/requests/{requestId}'
+            f"timeoff/employees/{employeeId}/requests/{requestId}"
         )
-    
-    def get_requests_since_date(self, since: str, includePending: Optional[bool] = None):
+
+    def get_requests_since_date(
+        self, since: str, includePending: Optional[bool] = None
+    ):
         """
         Get all new/deleted time off requests since the specified date.
 
@@ -218,12 +217,16 @@ class TimeOff(BobEndpoint):
         if includePending:
             query["includePending"] = includePending
 
-        return self.client.get(
-            'timeoff/requests/changes', 
-            query=query
-        )
-    
-    def get_whos_out_of_office(self, fromDate: str, toDate: str, includeHourly: Optional[bool] = None, includePrivate: Optional[bool] = None, includePending: Optional[bool] = None):
+        return self.client.get("timeoff/requests/changes", query=query)
+
+    def get_whos_out_of_office(
+        self,
+        fromDate: str,
+        toDate: str,
+        includeHourly: Optional[bool] = None,
+        includePrivate: Optional[bool] = None,
+        includePending: Optional[bool] = None,
+    ):
         """
         Read a list of who's out of the office.
 
@@ -252,19 +255,21 @@ class TimeOff(BobEndpoint):
         if includePending:
             query["includePending"] = includePending
 
-        return self.client.get(
-            'timeoff/whosout', 
-            query=query
-            )
-    
-    def get_whos_out_of_office_today(self, includeHourly: Optional[bool] = None, includePrivate: Optional[bool] = None, siteId: Optional[int] = None):
+        return self.client.get("timeoff/whosout", query=query)
+
+    def get_whos_out_of_office_today(
+        self,
+        includeHourly: Optional[bool] = None,
+        includePrivate: Optional[bool] = None,
+        siteId: Optional[int] = None,
+    ):
         """
         Read a list of who's out of the office today
 
         Args:
             includeHourly (bool, optional): Include Hourly Requests.
             includePrivate (bool, optional): Show the policy type's name instead of the policy's custom public name if the user has permission to view it, and the policy's custom public name exists.
-            siteId (int, optional): The employee's site ID. 
+            siteId (int, optional): The employee's site ID.
 
         Returns:
             List: Time off requests as seen by the logged in user for today
@@ -281,11 +286,8 @@ class TimeOff(BobEndpoint):
         if siteId is not None:
             query["siteId"] = siteId
 
-        return self.client.get(
-            'timeoff/outtoday',
-            query=query
-        )
-    
+        return self.client.get("timeoff/outtoday", query=query)
+
     def get_policy_type_reason_codes(self, policyType: str):
         """
         Get the list of reason codes for a given policy type.
@@ -302,10 +304,8 @@ class TimeOff(BobEndpoint):
         Reference:
             https://apidocs.hibob.com/reference/get_timeoff-policy-types-policytype-reason-codes
         """
-        return self.client.get(
-            f'timeoff/policy-types/{policyType}/reason-codes'
-        )
-    
+        return self.client.get(f"timeoff/policy-types/{policyType}/reason-codes")
+
     def add_reason_codes(self, policyType: str, reasonCodes: List[str]):
         """
         Add a list of reason codes for a given policy type.
@@ -326,12 +326,11 @@ class TimeOff(BobEndpoint):
         json_body = {}
 
         json_body["reasonCodes"] = reasonCodes
-        
+
         return self.client.post(
-            f'timeoff/policy-types/{policyType}/reason-codes',
-            json_body=json_body
+            f"timeoff/policy-types/{policyType}/reason-codes", json_body=json_body
         )
-    
+
     def get_policy_type_details(self, policyType: str):
         """
         Get details about a given policy type.
@@ -348,10 +347,8 @@ class TimeOff(BobEndpoint):
         Reference:
             https://apidocs.hibob.com/reference/get_timeoff-policy-types-policytype
         """
-        return self.client.get(
-            f'timeoff/policy-types/{policyType}'
-        )
-    
+        return self.client.get(f"timeoff/policy-types/{policyType}")
+
     def get_policy_types(self):
         """
         Get a list of all policy type names.
@@ -362,8 +359,8 @@ class TimeOff(BobEndpoint):
         Reference:
             https://apidocs.hibob.com/reference/get_timeoff-policy-types
         """
-        return self.client.get('timeoff/policy-types')
-    
+        return self.client.get("timeoff/policy-types")
+
     def get_policy_details(self, policyName: str):
         """
         Get details about a given policy.
@@ -382,11 +379,8 @@ class TimeOff(BobEndpoint):
 
         query["policyName"] = policyName
 
-        return self.client.get(
-            f'timeoff/policies',
-            query=query
-        )
-    
+        return self.client.get(f"timeoff/policies", query=query)
+
     def get_policy_names(self, policyTypeName: str):
         """
         Get a list of policy names for a given policy type.
@@ -404,11 +398,8 @@ class TimeOff(BobEndpoint):
 
         query["policyTypeName"] = policyTypeName
 
-        return self.client.get(
-            'timeoff/policies/names',
-            query=query
-        )
-    
+        return self.client.get("timeoff/policies/names", query=query)
+
     def get_employee_balance(self, employeeId: str, policyType: str, date: str):
         """
         Get the balance for a given employee, for a given policy type, as of a given date.
@@ -430,20 +421,17 @@ class TimeOff(BobEndpoint):
         query["policyType"] = policyType
         query["date"] = date
 
-        return self.client.get(
-            f'timeoff/employees/{employeeId}/balance',
-            query=query
-        )
+        return self.client.get(f"timeoff/employees/{employeeId}/balance", query=query)
 
     def create_balance_adjustment(
-            self, 
-            employeeId: str, 
-            adjustmentType: Optional[str] = None, 
-            policyType: Optional[str] = None, 
-            effectiveDate: Optional[str] = None, 
-            amount: Optional[float] = None, 
-            reason: Optional[str] = None
-        ):
+        self,
+        employeeId: str,
+        adjustmentType: Optional[str] = None,
+        policyType: Optional[str] = None,
+        effectiveDate: Optional[str] = None,
+        amount: Optional[float] = None,
+        reason: Optional[str] = None,
+    ):
         """
         Create a balance adjustment for a given employee for a given effective date.
 
@@ -474,10 +462,7 @@ class TimeOff(BobEndpoint):
             json_body["amount"] = amount
         if reason:
             json_body["reason"] = reason
-        
+
         return self.client.post(
-            f'timeoff/employees/{employeeId}/adjustments',
-            json_body=json_body
+            f"timeoff/employees/{employeeId}/adjustments", json_body=json_body
         )
-    
-    

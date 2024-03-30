@@ -1,8 +1,11 @@
 from .base import BobEndpoint
 from typing import Optional
 
+
 class Payroll(BobEndpoint):
-    def read_history(self, department: Optional[str] = None, showInactive: Optional[bool] = None):
+    def read_history(
+        self, department: Optional[str] = None, showInactive: Optional[bool] = None
+    ):
         """
         Read payroll history.
 
@@ -15,14 +18,11 @@ class Payroll(BobEndpoint):
             Default: Unexpected error
 
         References:
-            https://apidocs.hibob.com/reference/get_payroll-history 
+            https://apidocs.hibob.com/reference/get_payroll-history
         """
         query = {}
-        
+
         query["department"] = department
         query["showInactive"] = showInactive
 
-        return self.client.get(
-            'payroll/history',
-            query=query
-            )
+        return self.client.get("payroll/history", query=query)
