@@ -1,5 +1,5 @@
 from .base import BobEndpoint
-from models.Tasks import Task
+from .models.Tasks import Task
 from typing import Optional
 
 

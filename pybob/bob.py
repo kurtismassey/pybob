@@ -1,5 +1,5 @@
-from bob_client import BobClient
-from v1 import (
+from .bob_client import BobClient
+from .v1 import (
     people,
     onboarding,
     reports,

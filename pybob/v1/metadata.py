@@ -1,6 +1,6 @@
 from .base import BobEndpoint
 from typing import Optional, List
-from models.Metadata import BobField
+from .models.Metadata import BobField
 
 
 class Metadata(BobEndpoint):

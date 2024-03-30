@@ -1,11 +1,11 @@
 from .base import BobEndpoint
-from models.People import (
+from .models.People import (
     SearchModel,
     FilterModel,
     HumanReadableValues,
     TerminationReasonType,
 )
-from models.Payroll import (
+from .models.Payroll import (
     PayFrequency,
     PayPeriod,
     Base,

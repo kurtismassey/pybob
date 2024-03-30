@@ -1,5 +1,5 @@
 from .base import BobEndpoint
-from models.Reports import ReportFormat
+from .models.Reports import ReportFormat
 from typing import Optional
 
 
