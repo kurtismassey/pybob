@@ -1,41 +1,84 @@
-# python-hibob
+# PyBob
 
-[![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-python-hibob is an unofficial python3 driver for [HiBob](https://www.hibob.com/) [API](https://apidocs.hibob.com/)
+PyBob is an unofficial python SDK for the [Bob](https://www.hibob.com/) [API](https://apidocs.hibob.com/)
 
-## Installation
-
-Clone this repo to use this package:
-
-`git clone git@github.com:uvoteam/python-hibob.git hibob`
-
-Install required packages:
-
-`pip3 install -r hibob/requirements.txt`
-
-## Usage
+### Initialise
 
 ```python
-from hibob import Driver
+from pybob import Bob
 
-driver = Driver(
-    api_token="YOUR_TOKEN_HERE"
+bob = Bob(
+    service_account_id="YOUR_SERVICE_ACCOUNT_ID_HERE"
+    service_account_token="YOUR_SERVICE_ACCOUNT_TOKEN_HERE"
+)
+```
+
+### Examples
+
+Company search
+
+```python
+
+# Search company people
+employee = bob.people.search(
+    fields=["root.id", "root.fullName", "root.email"],
+    filters=[{
+        "fieldPath": "root.email",
+        "operator": "equals",
+        "values": ["anakin.skywalker@company.com"]
+        }]
 )
 
-# Read company people
-people = driver.people.list()
+print(employee)
+
 ```
-For more detailed info check [wiki](https://github.com/uvoteam/python-hibob/wiki)
 
-## Roadmap
+Output
 
-* Installation from [PyPi](https://pypi.org/)
-* Improved docstrings
-* Unittests
+```bash
+{ 'employees' : [
+    {
+    'fullName': 'Anakin Skywalker', 
+    '/root/email': {
+        'value': 'anakin.skywalker@company.com'
+        }, 
+    '/root/fullName': {
+        'value': 'Anakin Skywalker'
+        }, 
+    'email': 'anakin.skywalker@company.com', 
+    '/root/id': {
+        'value': '123456789'
+        }, 
+    'id': '123456789'
+        }
+    ] 
+}
+```
 
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Employment history
 
-## License
-[MIT](LICENCE.md)
+```python
+# List employment history
+results = bob.people.employee.list_employment_history(
+    employeeId="123456789"
+)
+
+working_pattern = results["values"][0]["workingPattern"]["days"]
+
+for day, hours in working_pattern.items():
+    print(f"{day}: {hours}")
+```
+
+Output
+
+```bash
+monday: 7
+tuesday: 7
+wednesday: 7
+thursday: 7
+friday: 7
+saturday: 0
+sunday: 0
+```

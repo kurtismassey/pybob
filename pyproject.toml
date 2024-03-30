@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "pybob"
+version = "0.1.0"
+description = "An unofficial python SDK for the Bob HR platform."
+authors = ["Kurtis Massey <55586356+kurtismassey@users.noreply.github.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+requests = "^2.31.0"
+pydantic = "^2.6.4"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
