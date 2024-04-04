@@ -1,6 +1,6 @@
 from .base import BobEndpoint
 from typing import Optional, List
-import mimetypes
+import filetypes
 
 
 class Documents(BobEndpoint):
@@ -78,10 +78,10 @@ class Documents(BobEndpoint):
             case _:
                 endpoint = f"docs/people/{employeeId}/folders/{folderId}/upload"
 
-        mime_type, _ = mimetypes.guess_type(file)
+        file_type, _ = filetype.guess(file)
 
         return self.client.post(
-            endpoint, files={"file": (file, open(file, "rb"), mime_type)}
+            endpoint, files={"file": (file, open(file, "rb"), file_type.mime)}
         )
 
     def delete_document(self, employeeId: str, docId: str, folderId: str):
