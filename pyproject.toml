@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pybob-sdk"
-version = "0.1.6"
+version = "0.1.7"
 description = "An unofficial python SDK for the Bob HR platform."
 authors = ["Kurtis Massey <55586356+kurtismassey@users.noreply.github.com>"]
 license = "MIT"

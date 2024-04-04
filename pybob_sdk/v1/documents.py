@@ -1,6 +1,6 @@
 from .base import BobEndpoint
 from typing import Optional, List
-import filetypes
+import filetype
 
 
 class Documents(BobEndpoint):
