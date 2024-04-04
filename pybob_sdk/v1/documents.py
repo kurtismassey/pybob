@@ -78,7 +78,7 @@ class Documents(BobEndpoint):
             case _:
                 endpoint = f"docs/people/{employeeId}/folders/{folderId}/upload"
 
-        file_type, _ = filetype.guess(file)
+        file_type = filetype.guess(file)
 
         return self.client.post(
             endpoint, files={"file": (file, open(file, "rb"), file_type.mime)}
